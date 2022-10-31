@@ -309,7 +309,7 @@ return [
         [
             'text' => 'blog',
             'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
+            'can'  => 'isUser',
         ],
         [
             'text'        => 'pages',
@@ -317,6 +317,7 @@ return [
             'icon'        => 'far fa-fw fa-file',
             'label'       => 4,
             'label_color' => 'success',
+            'can'  => ['isUser', 'isAdmin'],
         ],
         [
             'text'        => 'Books',
@@ -328,11 +329,13 @@ return [
             'text' => 'profile',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-fw fa-user',
+            'can'  => 'isAdmin',
         ],
         [
             'text' => 'change_password',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-fw fa-lock',
+            'can'  => 'isAdmin',
         ],
         [
             'text'    => 'multilevel',
