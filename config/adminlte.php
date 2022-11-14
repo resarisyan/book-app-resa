@@ -323,6 +323,7 @@ return [
             'text'        => 'Books',
             'url'         => 'admin/books',
             'icon'        => 'fas fa-fw fa-book',
+            'can'         => 'isAdmin'
         ],
         ['header' => 'account_settings'],
         [

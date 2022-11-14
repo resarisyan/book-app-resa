@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
+use App\Models\Book;
+
 class AdminController extends Controller
 {
     public function __construct(){
@@ -16,5 +18,43 @@ class AdminController extends Controller
     public function index(){
         $user = Auth::user();
         return view('home', compact('user'));
+    }
+
+    public function books(){
+        $user = Auth::user();
+        $books = Book::all();
+        return view('book', compact('user', 'books'));
+    }
+
+    public function submit_book(Request $request){
+        $validate = $request->validate([
+            'judul' => 'required|max:255',
+            'penulis' => 'required',
+            'tahun' => 'required',
+            'penerbit' => 'required'
+        ]);
+        $book = new Book;
+        $book->judul = $request->get('judul');
+        $book->penulis = $request->get('penulis');
+        $book->tahun = $request->get('tahun');
+        $book->penerbit = $request->get('penerbit');
+        if($request->hasFile('cover')){
+            $extension = $request->file('cover')->extension();
+            $filename = 'cover_buku_'.time().'.'.$extension;
+            $request->file('cover')->storeAs('public/cover_buku', $filename);
+            $book->cover = $filename;
+        }
+        $book->save();
+        $notification = [
+            'message' => 'Data Buku Berhasil Ditambahkan',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->route('admin.books')->with($notification);
+    }
+
+    public function getDataBuku($id){
+        $buku = Book::find($id);
+        return response()->json($buku);
     }
 }
