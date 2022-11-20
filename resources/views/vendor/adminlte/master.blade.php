@@ -105,43 +105,44 @@
     @endif
 
     {{-- Custom Scripts --}}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
             timer: 3000
-        })
+        });
         @if (Session::has('message'))
             var type = "{{Session::get('alert-type')}}";
             switch(type){
                 case 'info':
                     Toast.fire({
-                        type: 'info',
+                        icon: 'info',
                         title: "{{Session::get('message')}}"
                     })
                 break;
                 case 'success':
                     Toast.fire({
-                            type: 'success',
+                            icon: 'success',
                             title: "{{Session::get('message')}}"
                         })
                     break;
                 case 'warning':
                     Toast.fire({
-                            type: 'warning',
+                            icon: 'warning',
                             title: "{{Session::get('message')}}"
                         })
                     break;
                 case 'error':
                         Toast.fire({
-                            type: 'error',
+                            icon: 'error',
                             title: "{{Session::get('message')}}"
                         })
                     break;
                 case 'dialog_error':
                         Toast.fire({
-                            type: 'error',
+                            icon: 'error',
                             title: "Ooops",
                             text: "{{Session::get('message')}}",
                             timer:3000
@@ -159,10 +160,10 @@
                 })
             @endforeach
         @endif
-
-        $('#table-data').DataTable();
-        let baseurl = "<?= url('/') ?>"
-        let fullURL = "<?= url()->full() ?>"
+        
+        $('#tabel-data').DataTable();
+        let baseurl = '{{ url('/') }}';
+        let fullURL = '{{ url()->full() }}';
     </script>
     @yield('adminlte_js')
 

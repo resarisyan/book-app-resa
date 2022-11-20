@@ -11,22 +11,26 @@ use App\Models\Book;
 
 class AdminController extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
-    public function index(){
+    public function index()
+    {
         $user = Auth::user();
         return view('home', compact('user'));
     }
 
-    public function books(){
+    public function books()
+    {
         $user = Auth::user();
         $books = Book::all();
         return view('book', compact('user', 'books'));
     }
 
-    public function submit_book(Request $request){
+    public function submit_book(Request $request)
+    {
         $validate = $request->validate([
             'judul' => 'required|max:255',
             'penulis' => 'required',
@@ -38,9 +42,9 @@ class AdminController extends Controller
         $book->penulis = $request->get('penulis');
         $book->tahun = $request->get('tahun');
         $book->penerbit = $request->get('penerbit');
-        if($request->hasFile('cover')){
+        if ($request->hasFile('cover')) {
             $extension = $request->file('cover')->extension();
-            $filename = 'cover_buku_'.time().'.'.$extension;
+            $filename = 'cover_buku_' . time() . '.' . $extension;
             $request->file('cover')->storeAs('public/cover_buku', $filename);
             $book->cover = $filename;
         }
@@ -53,8 +57,52 @@ class AdminController extends Controller
         return redirect()->route('admin.books')->with($notification);
     }
 
-    public function getDataBuku($id){
+    public function getDataBuku($id)
+    {
         $buku = Book::find($id);
         return response()->json($buku);
+    }
+
+    public function update_book(Request $request)
+    {
+        $book = Book::find($request->get('id'));
+        $validate = $request->validate([
+            'judul' => 'required|max:255',
+            'penulis' => 'required',
+            'tahun' => 'required',
+            'penerbit' => 'required'
+        ]);
+
+        $book->judul = $request->get('judul');
+        $book->penulis = $request->get('penulis');
+        $book->tahun = $request->get('tahun');
+        $book->penerbit = $request->get('penerbit');
+
+        if ($request->hasFile('cover')) {
+            $extension = $request->file('cover')->extension();
+            $filename = 'cover_buku_' . time() . '.' . $extension;
+            $request->file('cover')->storeAs('public/cover_buku', $filename);
+            Storage::delete('public/cover_buku/' . $request->get('old_cover'));
+            $book->cover = $filename;
+        }
+        $book->save();
+        $notification = [
+            'message' => 'Data Buku Berhasil Diubah',
+            'alert-type' => 'success'
+        ];
+        return redirect()->route('admin.books')->with($notification);
+    }
+
+    public function delete_book($id)
+    {
+        $book = Book::find($id);
+        Storage::delete('public/cover_buku/' . $book->cover);
+        $book->delete();
+        $success = true;
+        $message = 'Data Buku Berhasil Dihapus';
+        return response()->json([
+            'success' => $success,
+            'message' => $message
+        ]);
     }
 }

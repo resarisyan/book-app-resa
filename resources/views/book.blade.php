@@ -47,7 +47,7 @@
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic Example">
                                     <button type="button" id="btn-edit-buku" class="btn btn-success" data-toggle="modal" data-target="#editBukuModal" data-id="{{$book->id}}">Edit</button>
-                                    <button type="button" id="btn-hapus-buku" class="btn btn-danger" data-toggle="modal" data-target="#hapusBukuModal" data-id="{{$book->id}}">Hapus</button>
+                                    <button type="button" id="btn-hapus-buku" class="btn btn-danger" data-toggle="modal" onclick="deleteConfirmation('{{ $book->id }}', '{{ $book->judul }}')">Hapus</button>
                                 </div>
                             </td>
                         </tr>
@@ -110,7 +110,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{route('admin.book.submit')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{route('admin.book.update')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
                     <div class="form-group">
@@ -131,7 +131,7 @@
                     </div>
                     <div class="form-group">
                         <label for="edit-cover">Cover</label>
-                        <input type="file" class="form-control" name="cover" id="edit-cover" required>
+                        <input type="file" class="form-control" name="cover" id="edit-cover">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -148,15 +148,15 @@
 
 @section('js')
     <script>
-        $(()=>{
-            $(document).on('click', '#btn-edit-buku', ()=>{
+        $(function(){
+            $(document).on('click', '#btn-edit-buku', function(){
                 let id = $(this).data('id');
                 $('#image-area').empty();
                 $.ajax({
                     type: 'get',
                     url: "{{url('/admin/ajaxadmin/dataBuku')}}/"+id,
                     dataType: 'json',
-                    success: (res) => {
+                    success: function(res) {
                         $('#edit-judul').val(res.judul);
                         $('#edit-penerbit').val(res.penerbit);
                         $('#edit-penulis').val(res.penulis);
@@ -174,6 +174,42 @@
                     }
                 })
             })
-        })
+        });
+
+        function deleteConfirmation(npm, judul){
+            Swal.fire({
+                title: 'Hapus?',
+                icon: 'warning',
+                text: 'Apakah anda yakin akan menghapus buku dengan judul ' + judul + '?!',
+                showCancelButton: 10,
+                coonfirmButtonText: 'Ya, lakukan!',
+                cancelButtonText: 'Tidak, batalkan',
+                reverseButtons: !0
+            }).then(function(e){
+                if(e.value === true){
+                    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                    $.ajax({
+                        type: 'POST',
+                        url: 'books/delete/'+npm,
+                        data: {_token:CSRF_TOKEN},
+                        dataType: 'JSON',
+                        success: function(result){
+                            if(result.success === true){
+                                Swal.fire('Done!', result.message, 'success');
+                                setTimeout(() => {
+                                    location.reload()
+                                }, 1000);
+                            } else {
+                                Swal.fire('Error!', result.message, 'error')
+                            }
+                        }
+                    })
+                }else{
+                    e.dismiss;
+                }
+            }, function(dismiss) {
+                return false;
+            })
+        }
     </script>
 @stop
