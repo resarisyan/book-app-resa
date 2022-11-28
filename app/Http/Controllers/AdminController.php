@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BooksExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 use App\Models\Book;
+use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 
 class AdminController extends Controller
@@ -112,5 +114,10 @@ class AdminController extends Controller
         $books = Book::all();
         $pdf = PDF::loadview('print_books', ['books' => $books]);
         return $pdf->download('data_buku.pdf');
+    }
+
+    public function export()
+    {
+        return Excel::download(new BooksExport, 'books.xlsx');
     }
 }
