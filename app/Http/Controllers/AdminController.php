@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\BooksExport;
+use App\Imports\BooksImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -119,5 +120,16 @@ class AdminController extends Controller
     public function export()
     {
         return Excel::download(new BooksExport, 'books.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        Excel::import(new BooksImport, $request->file('file'));
+        $notification = [
+            'message' => 'Import Data Berhasil Dilakukan',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->route('admin.books')->with($notification);
     }
 }
