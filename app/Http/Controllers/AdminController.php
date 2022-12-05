@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
+use App\Http\Requests\BookRequest;
+use App\Http\Requests\ExcelRequest;
 
 use App\Models\Book;
 use Maatwebsite\Excel\Facades\Excel;
@@ -33,14 +35,8 @@ class AdminController extends Controller
         return view('book', compact('user', 'books'));
     }
 
-    public function submit_book(Request $request)
+    public function submit_book(BookRequest $request)
     {
-        $validate = $request->validate([
-            'judul' => 'required|max:255',
-            'penulis' => 'required',
-            'tahun' => 'required',
-            'penerbit' => 'required'
-        ]);
         $book = new Book;
         $book->judul = $request->get('judul');
         $book->penulis = $request->get('penulis');
@@ -67,15 +63,9 @@ class AdminController extends Controller
         return response()->json($buku);
     }
 
-    public function update_book(Request $request)
+    public function update_book(BookRequest $request)
     {
         $book = Book::find($request->get('id'));
-        $validate = $request->validate([
-            'judul' => 'required|max:255',
-            'penulis' => 'required',
-            'tahun' => 'required',
-            'penerbit' => 'required'
-        ]);
 
         $book->judul = $request->get('judul');
         $book->penulis = $request->get('penulis');
@@ -122,7 +112,7 @@ class AdminController extends Controller
         return Excel::download(new BooksExport, 'books.xlsx');
     }
 
-    public function import(Request $request)
+    public function import(ExcelRequest $request)
     {
         Excel::import(new BooksImport, $request->file('file'));
         $notification = [

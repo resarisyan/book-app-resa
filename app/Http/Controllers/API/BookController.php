@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Book;
 use Exception;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\BookRequest;
 
 class BookController extends Controller
 {
@@ -25,15 +26,8 @@ class BookController extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function create(BookRequest $request)
     {
-        $validated = $request->validate([
-            'judul' => 'required|max:255',
-            'penulis' => 'required',
-            'tahun' => 'required',
-            'penerbit' => 'required',
-            'cover' => 'image|file|max:2048'
-        ]);
 
         if ($request->hasFile('cover')) {
             $extension = $request->file('cover')->extension();
@@ -53,15 +47,8 @@ class BookController extends Controller
         ], 200);
     }
 
-    public function update(Request $request, $id)
+    public function update(BookRequest $request, $id)
     {
-        $validated = $request->validate([
-            'judul' => 'required|max:255',
-            'penulis' => 'required',
-            'tahun' => 'required',
-            'penerbit' => 'required',
-            'cover' => 'image|file|max:2048'
-        ]);
 
         if ($request->hasFile('cover')) {
             $extension = $request->file('cover')->extension();

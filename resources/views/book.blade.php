@@ -160,9 +160,13 @@
                         <label for="edit-penerbit">Penerbit</label>
                         <input type="text" class="form-control" name="penerbit" id="edit-penerbit" required>
                     </div>
-                    <div class="form-group">
-                        <label for="edit-cover">Cover</label>
-                        <input type="file" class="form-control" name="cover" id="edit-cover">
+                    <div class="mb-5">
+                        <div class="form-group" id="image-area">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-cover">Cover</label>
+                            <input type="file" class="form-control" name="cover" id="edit-cover">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
