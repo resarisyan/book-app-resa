@@ -8,6 +8,8 @@ use App\Models\Book;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\BookRequest;
+use Illuminate\Support\Facades\Validator;
+
 
 class BookController extends Controller
 {
@@ -26,8 +28,29 @@ class BookController extends Controller
         }
     }
 
-    public function create(BookRequest $request)
+    public function create(Request $request)
     {
+        $validated = Validator::make($request->all(),[
+            'judul' => 'required|max:255|unique:books',
+            'penulis' => 'required',
+            'tahun' => 'required',
+            'penerbit' => 'required',
+            'cover' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        if ($validated->fails()){
+            return response()->json([
+                'message' => 'Buku Gagal Ditambahkan',
+                'book' => $validated->errors()->first()
+            ], 422);
+        }
+
+        $data = [
+            'judul' => $request->get('judul'),
+            'penulis' => $request->get('penulis'),
+            'tahun' => $request->get('tahun'),
+            'penerbit' => $request->get('penerbit'),
+        ];
 
         if ($request->hasFile('cover')) {
             $extension = $request->file('cover')->extension();
@@ -36,19 +59,47 @@ class BookController extends Controller
                 'public/cover_buku',
                 $filename
             );
-            $validated['cover'] = $filename;
+            $data['cover'] = $filename;
         }
 
-        Book::create($validated);
+        $book = Book::create($data);
 
-        return response()->json([
-            'message' => 'Buku Berhasil Ditambahkan',
-            'book' => $validated,
-        ], 200);
+        if($book){
+            return response()->json([
+                'message' => 'Buku Berhasil Ditambahkan',
+                'book' => $book
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Buku Gagal Ditambahkan',
+                'book' => $book
+            ], 400);
+        }
     }
 
-    public function update(BookRequest $request, $id)
+    public function update(Request $request, $id)
     {
+        $validated = Validator::make($request->all(),[
+            'judul' => 'required|max:255|unique:books',
+            'penulis' => 'required',
+            'tahun' => 'required',
+            'penerbit' => 'required',
+            'cover' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        if ($validated->fails()){
+            return response()->json([
+                'message' => 'Buku Gagal Ditambahkan',
+                'book' => $validated->errors()->first()
+            ], 422);
+        }
+
+        $data = [
+            'judul' => $request->get('judul'),
+            'penulis' => $request->get('penulis'),
+            'tahun' => $request->get('tahun'),
+            'penerbit' => $request->get('penerbit'),
+        ];
 
         if ($request->hasFile('cover')) {
             $extension = $request->file('cover')->extension();
@@ -62,21 +113,35 @@ class BookController extends Controller
 
         $book = Book::find($id);
         Storage::delete('public/cover_buku' . $book->cover);
-        $book->update($validated);
+        $book->update($data);
 
-        return response()->json([
-            'message' => 'Buku Berhasil Diubah',
-            'book' => $book
-        ], 200);
+        if($book){
+            return response()->json([
+                'message' => 'Buku Berhasil Ditambahkan',
+                'book' => $book
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Buku Gagal Ditambahkan',
+                'book' => $book
+            ], 400);
+        }
+        
     }
 
     public function delete($id)
     {
         $book = Book::find($id);
-        Storage::delete('public/cover_buku' . $book->cover);
-        $book->delete();
-        return response()->json([
-            'message' => 'Buku Berhasil Dihapus'
-        ], 200);
+        if($book){
+            Storage::delete('public/cover_buku' . $book->cover);
+            $book->delete();
+            return response()->json([
+                'message' => 'Buku Berhasil Dihapus'
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'ID Buku Tidak Ditemukan',
+            ], 400);
+        }
     }
 }
