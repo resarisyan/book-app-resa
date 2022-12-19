@@ -26,18 +26,13 @@ BookApp adalah aplikasi pengelolaan buku sederhana yang masih dalam tahap pengem
 6. `php artisan serve` untuk menjalankan server
 
 ## Demo
-
 | Home Page | Dashboard Page |
-| --------- | -------------- |
+| --- | --- |
+| [![Home Page](/screens/s1.jpg)](#)  | [![Dashboard Page](/screens/s4.png)]
 
-| [![Home Page](/screens/s1.jpg)]  
-| [![Dashboard Page](/screens/us4sers.jpg)]
-
-| Login                      | Register |
-| -------------------------- | -------- |
-| [![Login](screens/s2.png)] |
-
-[![Register]]
+| Login | Register |
+| --- | --- |
+[![Login](/screens/s2.png)](#)  | [![Register](/screens/s3.png)](#)
 
 ## License
 
