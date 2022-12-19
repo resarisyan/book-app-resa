@@ -28,7 +28,7 @@ BookApp adalah aplikasi pengelolaan buku sederhana yang masih dalam tahap pengem
 ## Demo
 | Home Page | Dashboard Page |
 | --- | --- |
-| [![Home Page](/screens/s1.jpg)](#)  | [![Dashboard Page](/screens/s4.png)]
+[![Home Page](/screens/s1.jpg)](#)  | [![Dashboard Page](/screens/s4.png)](#)
 
 | Login | Register |
 | --- | --- |
