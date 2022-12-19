@@ -86,7 +86,7 @@ return [
     'auth_logo' => [
         'enabled' => true,
         'img' => [
-            'path' => asset('storage/img/logo.png'),
+            'path' => asset('storage/img/logo_dark.png'),
             'alt' => 'Book App',
             'class' => '',
             'width' => 50,
