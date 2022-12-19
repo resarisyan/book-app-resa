@@ -218,10 +218,10 @@
     <!-- Jumbotron -->
     <div class="jumbotron jumbotron-fluid">
       <div class="container">
-        <h1 class="display-4">Get work done <span>faster</span>
-          <br>and <span>better</span> with us
+        <h1 class="display-4">Publish Your Book <span>Fast</span>
+          <br>And <span>Safety</span>
         </h1>
-        <a href="#" class="btn btn-info btn-lg tombol">View Our Work</a>
+        <a href="#" class="btn btn-info btn-lg tombol">Get It Now</a>
       </div>
     </div>
     <!-- akhir Jumbotron -->
@@ -253,12 +253,12 @@
       <!-- Workingspace -->
       <div class="row workingspace">
         <div class="col-lg-6">
-          <img src="{{asset('storage/img/workingspace.png')}}" alt="Working Space" class="img-fluid">
+          <img src="{{asset('storage/img/workingspace.jpg')}}" alt="Working Space" class="img-fluid">
         </div>
         <div class="col-lg-5">
-          <h2>You <span>Work</span> Like at <span>Home</span>
+          <h2>Get <span>Your</span> Favorite <span>Book</span>
           </h2>
-          <p>Bekerja dengan suasana hati yang lebih asik, menyenangkan dan mempelajari hal baru setiap harinya.</p>
+          <p>If one cannot enjoy reading a book over and over again, there is no use in reading it at all.</p>
           <a href="#" class="btn btn-danger tombol">Gallery</a>
         </div>
       </div>
@@ -267,7 +267,7 @@
       <section class="testimonial">
         <div class="row justify-content-center">
           <div class="col-lg-8">
-            <p>"Bekerja dengan suasana hati yang lebih asik dan mempelajari hal baru setiap harinya."</p>
+            <p>"A room without books is like a body without a soul."</p>
           </div>
         </div>
         <div class="row justify-content-center">
